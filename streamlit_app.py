@@ -15,38 +15,39 @@ st.set_page_config(
 st.title("🎙️ Transcrição de Áudio com OpenAI Whisper")
 st.markdown("Faça upload de até **10 arquivos de áudio** (.mp3) para transcrição automática.")
 
-# Sidebar para configuração da API Key
+# Sidebar com informações
 with st.sidebar:
     st.header("⚙️ Configurações")
-    
-    # Tentar pegar a chave do secrets primeiro
-    api_key = st.secrets.get("OPENAI_API_KEY", "")
-    
-    # Se não houver no secrets, permitir input manual
-    if not api_key:
-        api_key = st.text_input(
-            "OpenAI API Key",
-            type="password",
-            help="Insira sua chave da API OpenAI"
-        )
-    else:
-        st.success("✅ API Key carregada dos secrets")
+    st.success("✅ API Key configurada")
     
     st.markdown("---")
     st.markdown("""
     ### 📝 Como usar:
-    1. Configure sua API Key da OpenAI
-    2. Faça upload de até 10 arquivos .mp3
-    3. Clique em 'Transcrever Áudios'
-    4. Aguarde o processamento
+    1. Faça upload de até 10 arquivos .mp3
+    2. Clique em 'Transcrever Áudios'
+    3. Aguarde o processamento
+    4. Baixe as transcrições
     """)
     
     st.markdown("---")
     st.info("💡 **Dica:** Arquivos grandes podem levar mais tempo para processar.")
 
-# Verificar se a API key foi fornecida
-if not api_key:
-    st.warning("⚠️ Por favor, configure sua OpenAI API Key na barra lateral.")
+# Carregar API Key do Streamlit Secrets
+try:
+    api_key = st.secrets["OPENAI_API_KEY"]
+except Exception as e:
+    st.error("❌ **Erro:** API Key da OpenAI não configurada!")
+    st.info("""
+    **Como configurar:**
+    
+    1. Acesse as configurações do app no Streamlit Cloud
+    2. Vá em **Settings → Secrets**
+    3. Adicione:
+    ```
+    OPENAI_API_KEY = "sua-chave-aqui"
+    ```
+    4. Salve e reinicie o app
+    """)
     st.stop()
 
 # Configurar o cliente OpenAI
