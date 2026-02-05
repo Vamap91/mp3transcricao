@@ -182,13 +182,13 @@ if uploaded_files:
                     tmp_file.write(uploaded_file.getvalue())
                     tmp_file_path = tmp_file.name
                 
-                # Transcrever usando OpenAI Whisper
+                # Transcrever usando OpenAI Whisper (API v0.28)
                 with open(tmp_file_path, "rb") as audio_file:
-                    transcript = openai.audio.transcriptions.create(
+                    response = openai.Audio.transcribe(
                         model="whisper-1",
-                        file=audio_file,
-                        response_format="text"
+                        file=audio_file
                     )
+                    transcript = response["text"]
                 
                 # Limpar arquivo temporário
                 os.unlink(tmp_file_path)
