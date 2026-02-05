@@ -1,5 +1,5 @@
 import streamlit as st
-from openai import OpenAI
+import openai
 from io import BytesIO
 import tempfile
 import os
@@ -129,7 +129,7 @@ def gerar_pdf(resultados):
 # Carregar API Key do Streamlit Cloud Secrets
 try:
     api_key = st.secrets["OPENAI_API_KEY"]
-    client = OpenAI(api_key=api_key)
+    openai.api_key = api_key
 except Exception as e:
     st.error(f"❌ Erro ao carregar API Key: {str(e)}")
     st.stop()
@@ -184,7 +184,7 @@ if uploaded_files:
                 
                 # Transcrever usando OpenAI Whisper
                 with open(tmp_file_path, "rb") as audio_file:
-                    transcript = client.audio.transcriptions.create(
+                    transcript = openai.audio.transcriptions.create(
                         model="whisper-1",
                         file=audio_file,
                         response_format="text"
