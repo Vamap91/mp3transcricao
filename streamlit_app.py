@@ -126,24 +126,12 @@ def gerar_pdf(resultados):
     
     return buffer
 
-# Carregar API Key do Streamlit Secrets
+# Carregar API Key do Streamlit Cloud Secrets
 try:
     api_key = st.secrets["OPENAI_API_KEY"]
-    # Inicializar cliente OpenAI corretamente
     client = OpenAI(api_key=api_key)
 except Exception as e:
-    st.error("❌ **Erro:** API Key da OpenAI não configurada!")
-    st.info("""
-    **Como configurar:**
-    
-    1. Acesse as configurações do app no Streamlit Cloud
-    2. Vá em **Settings → Secrets**
-    3. Adicione:
-    ```
-    OPENAI_API_KEY = "sua-chave-aqui"
-    ```
-    4. Salve e reinicie o app
-    """)
+    st.error(f"❌ Erro ao carregar API Key: {str(e)}")
     st.stop()
 
 # Upload de arquivos
